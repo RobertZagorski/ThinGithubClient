@@ -1,0 +1,77 @@
+apply plugin: 'com.android.application'
+
+def changeApkName = { variant ->
+    variant.outputs.each { output ->
+        def apk = output.outputFile;
+        def newName = androidApplicationName;
+        if (variant.buildType.name == "release") {
+            newName += "-v" + variant.mergedFlavor.versionName + "-release.apk";
+        } else {
+            newName += "-v" + variant.mergedFlavor.versionName + ".apk";
+        }
+        if (!output.zipAlign) {
+            newName = newName.replace(".apk", "-unaligned.apk");
+        }
+        output.outputFile = new File(apk.parentFile, newName);
+        logger.info('INFO: Set outputFile to ' + output.outputFile + " for [" + output.name + "]");
+    }
+}
+
+android {
+    compileSdkVersion androidCompileSdkVersion
+    buildToolsVersion androidBuildToolsVersion
+    defaultConfig {
+        applicationId androidApplicationId
+        minSdkVersion androidMinSdkVersion
+        targetSdkVersion androidTargetSdkVersion
+        versionCode 100000
+        versionName "1.0.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    applicationVariants.all { variant ->
+        changeApkName(variant)
+    }
+}
+
+dependencies {
+    compile supportDependencies.design
+    compile supportDependencies.supportv4
+    compile viewDependencies.picasso
+
+    annotationProcessor diDependencies.daggerCompiler
+    compile diDependencies.dagger
+    annotationProcessor diDependencies.butterknifeCompiler
+    compile diDependencies.butterknife
+
+    compile rxDependencies.rxJava
+    compile rxDependencies.rxAndroid
+
+    compile restDependencies.retrofit
+    compile restDependencies.retrofitGsonConverter
+    compile restDependencies.retrofitRxJavaAdapter
+    compile restDependencies.okHttpLogging
+
+    androidTestCompile androidTestDependencies.junit
+    androidTestCompile androidTestDependencies.dexmaker_mockito
+    androidTestCompile androidTestDependencies.supportTestRunner
+    androidTestCompile androidTestDependencies.supportTestRules
+    androidTestCompile supportDependencies.supportAnnotations
+    androidTestCompile(androidTestDependencies.espresso) {
+        exclude group: 'javax.inject'
+    }
+    androidTestCompile(androidTestDependencies.espresso_contrib) {
+        exclude module: 'support-annotations'
+        exclude module: 'support-v4'
+        exclude module: 'recyclerview-v7'
+    }
+
+    testCompile testDependencies.junit
+    testCompile testDependencies.mockito
+}
