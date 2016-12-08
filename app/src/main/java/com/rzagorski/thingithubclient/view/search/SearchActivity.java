@@ -9,7 +9,12 @@ import com.rzagorski.thingithubclient.di.search.SearchActivityComponent;
 import com.rzagorski.thingithubclient.di.search.SearchActivityModule;
 import com.rzagorski.thingithubclient.utils.interfaces.ComponentCreator;
 
-public class SearchActivity extends AppCompatActivity implements ComponentCreator<SearchActivityComponent> {
+import javax.inject.Inject;
+
+public class SearchActivity extends AppCompatActivity
+        implements ComponentCreator<SearchActivityComponent>, SearchData.View {
+
+    @Inject SearchData.Presenter mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
