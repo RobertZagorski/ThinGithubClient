@@ -34,12 +34,12 @@ public class SearchInput implements Search.View, MaterialSearchView.OnQueryTextL
 
     @Override
     public void onSearchViewShown() {
-
+        mPresenter.onSearchOpened();
     }
 
     @Override
     public void onSearchViewClosed() {
-
+        mPresenter.onSearchClosed();
     }
 
     public void setMenuItem(MenuItem menuItem) {

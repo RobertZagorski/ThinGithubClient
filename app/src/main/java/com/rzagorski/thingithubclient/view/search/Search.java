@@ -10,6 +10,10 @@ public class Search {
 
     public interface Presenter {
         void onQueryChanged(String query);
+
+        void onSearchOpened();
+
+        void onSearchClosed();
     }
 
     public interface View extends MvpView {
