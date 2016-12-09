@@ -1,6 +1,7 @@
 package com.rzagorski.thingithubclient.di.search;
 
 import com.rzagorski.thingithubclient.data.api.ApiManager;
+import com.rzagorski.thingithubclient.data.interactor.SearchRepositoryInteractor;
 import com.rzagorski.thingithubclient.data.interactor.SearchUserInteractor;
 import com.rzagorski.thingithubclient.di.ActivityScope;
 import com.rzagorski.thingithubclient.view.search.SearchData;
@@ -22,10 +23,17 @@ public class SearchDataModule {
         return new SearchUserInteractor(apiManager);
     }
 
+    @Provides
+    @ActivityScope
+    SearchRepositoryInteractor provideSearchRepositoryInteractor(ApiManager apiManager) {
+        return new SearchRepositoryInteractor(apiManager);
+    }
 
     @Provides
     @ActivityScope
-    SearchData.Presenter provideSearchPresenter(SearchData.View view, SearchUserInteractor searchUserInteractor) {
-        return new SearchDataPresenterImpl(view, searchUserInteractor);
+    SearchData.Presenter provideSearchPresenter(SearchData.View view,
+                                                SearchUserInteractor searchUserInteractor,
+                                                SearchRepositoryInteractor searchRepositoryInteractor) {
+        return new SearchDataPresenterImpl(view, searchUserInteractor, searchRepositoryInteractor);
     }
 }

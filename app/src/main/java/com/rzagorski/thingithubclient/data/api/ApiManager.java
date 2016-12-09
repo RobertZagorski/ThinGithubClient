@@ -1,5 +1,6 @@
 package com.rzagorski.thingithubclient.data.api;
 
+import com.rzagorski.thingithubclient.model.api.ApiSearchRepository;
 import com.rzagorski.thingithubclient.model.api.ApiSearchUser;
 
 import rx.Observable;
@@ -11,4 +12,6 @@ import rx.Observable;
 public interface ApiManager {
 
     Observable<ApiSearchUser> getUsersBySearchQuery(String query);
+
+    Observable<ApiSearchRepository> getRepositoriesBySearchQuery(String query);
 }
