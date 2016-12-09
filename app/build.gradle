@@ -45,6 +45,7 @@ dependencies {
     compile supportDependencies.supportv4
     compile viewDependencies.picasso
     compile viewDependencies.materialSearchView
+    compile viewDependencies.adapterDelegates
 
     annotationProcessor diDependencies.daggerCompiler
     compile diDependencies.dagger
