@@ -1,7 +1,6 @@
-package com.rzagorski.thingithubclient.data;
+package com.rzagorski.thingithubclient.data.interactor;
 
 import com.rzagorski.thingithubclient.data.api.ApiManager;
-import com.rzagorski.thingithubclient.data.interactor.SearchUserInteractor;
 import com.rzagorski.thingithubclient.model.api.ApiSearchUser;
 import com.rzagorski.thingithubclient.model.app.GithubUser;
 

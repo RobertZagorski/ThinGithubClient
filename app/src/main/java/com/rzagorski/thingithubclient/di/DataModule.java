@@ -3,8 +3,11 @@ package com.rzagorski.thingithubclient.di;
 import android.app.Application;
 
 import com.rzagorski.thingithubclient.data.api.ApiManager;
+import com.rzagorski.thingithubclient.data.api.GithubApi;
+import com.rzagorski.thingithubclient.data.api.retrofit.RetrofitApiFactory;
 import com.rzagorski.thingithubclient.data.api.retrofit.RetrofitApiManagerImpl;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -22,8 +25,20 @@ public class DataModule {
     }
 
     @Provides
+    @Named("baseUrl")
+    String provideApiEndpoint() {
+        return GithubApi.BASE_URL;
+    }
+
+    @Provides
     @Singleton
-    ApiManager provideApiManager() {
-        return new RetrofitApiManagerImpl();
+    GithubApi provideGithubApi(@Named("baseUrl") String url) {
+        return RetrofitApiFactory.makeApiManager(url);
+    }
+
+    @Provides
+    @Singleton
+    ApiManager provideApiManager(GithubApi githubApi) {
+        return new RetrofitApiManagerImpl(githubApi);
     }
 }
