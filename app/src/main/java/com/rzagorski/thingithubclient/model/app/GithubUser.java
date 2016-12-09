@@ -3,14 +3,14 @@ package com.rzagorski.thingithubclient.model.app;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class GithubUser {
+public class GithubUser implements GithubItem {
 
     @SerializedName("login")
     @Expose
     private String login;
     @SerializedName("id")
     @Expose
-    private Integer id;
+    private Long id;
     @SerializedName("avatar_url")
     @Expose
     private String avatarUrl;
@@ -68,11 +68,11 @@ public class GithubUser {
         this.login = login;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

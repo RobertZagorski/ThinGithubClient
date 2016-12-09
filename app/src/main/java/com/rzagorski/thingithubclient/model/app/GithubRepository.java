@@ -3,10 +3,10 @@ package com.rzagorski.thingithubclient.model.app;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class GithubRepository {
+public class GithubRepository implements GithubItem {
     @SerializedName("id")
     @Expose
-    private Integer id;
+    private Long id;
     @SerializedName("name")
     @Expose
     private String name;
@@ -212,11 +212,11 @@ public class GithubRepository {
     @Expose
     private Double score;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

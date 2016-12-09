@@ -7,7 +7,10 @@ import com.rzagorski.thingithubclient.R;
 import com.rzagorski.thingithubclient.ThinGithubClientApplication;
 import com.rzagorski.thingithubclient.di.search.SearchActivityComponent;
 import com.rzagorski.thingithubclient.di.search.SearchActivityModule;
+import com.rzagorski.thingithubclient.model.app.GithubItem;
 import com.rzagorski.thingithubclient.utils.interfaces.ComponentCreator;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -28,5 +31,21 @@ public class SearchActivity extends AppCompatActivity
         return ((ThinGithubClientApplication) getApplicationContext())
                 .getApplicationComponent()
                 .provide(new SearchActivityModule(this));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mPresenter.onSearchQuery("square");
+    }
+
+    @Override
+    public void onSearchResults(List<GithubItem> githubItemList) {
+        //TODO show results
+    }
+
+    @Override
+    public void onSearchResultsError(Throwable e) {
+        //TODO show error
     }
 }
