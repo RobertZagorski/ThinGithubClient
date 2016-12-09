@@ -1,6 +1,7 @@
 package com.rzagorski.thingithubclient.di.search;
 
 import com.rzagorski.thingithubclient.di.ActivityScope;
+import com.rzagorski.thingithubclient.view.search.ListFragment;
 import com.rzagorski.thingithubclient.view.search.SearchActivity;
 
 import dagger.Module;
@@ -21,5 +22,11 @@ public class SearchActivityModule {
     @ActivityScope
     SearchActivity provideSearchActivity() {
         return mSearchActivity;
+    }
+
+    @Provides
+    @ActivityScope
+    ListFragment provideListFragment() {
+        return new ListFragment();
     }
 }

@@ -7,23 +7,23 @@ import com.rzagorski.thingithubclient.R;
 import com.rzagorski.thingithubclient.ThinGithubClientApplication;
 import com.rzagorski.thingithubclient.di.search.SearchActivityComponent;
 import com.rzagorski.thingithubclient.di.search.SearchActivityModule;
-import com.rzagorski.thingithubclient.model.app.GithubItem;
+import com.rzagorski.thingithubclient.utils.FragmentHelper;
 import com.rzagorski.thingithubclient.utils.interfaces.ComponentCreator;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
 public class SearchActivity extends AppCompatActivity
-        implements ComponentCreator<SearchActivityComponent>, SearchData.View {
+        implements ComponentCreator<SearchActivityComponent> {
 
-    @Inject SearchData.Presenter mPresenter;
+    @Inject ListFragment listFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         getComponent().inject(this);
+        getComponent().inject(listFragment);
+        FragmentHelper.replaceFragment(getSupportFragmentManager(), listFragment, R.id.fragment_list);
     }
 
     @Override
@@ -36,16 +36,5 @@ public class SearchActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        mPresenter.onSearchQuery("square");
-    }
-
-    @Override
-    public void onSearchResults(List<GithubItem> githubItemList) {
-        //TODO show results
-    }
-
-    @Override
-    public void onSearchResultsError(Throwable e) {
-        //TODO show error
     }
 }

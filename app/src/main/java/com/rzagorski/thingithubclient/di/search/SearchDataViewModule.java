@@ -1,6 +1,6 @@
 package com.rzagorski.thingithubclient.di.search;
 
-import com.rzagorski.thingithubclient.view.search.SearchActivity;
+import com.rzagorski.thingithubclient.view.search.ListFragment;
 import com.rzagorski.thingithubclient.view.search.SearchData;
 
 import dagger.Binds;
@@ -13,5 +13,5 @@ import dagger.Module;
 public abstract class SearchDataViewModule {
 
     @Binds
-    public abstract SearchData.View provideSearchView(SearchActivity view);
+    public abstract SearchData.View provideSearchView(ListFragment view);
 }
