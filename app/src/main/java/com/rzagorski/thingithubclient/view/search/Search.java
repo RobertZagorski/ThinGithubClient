@@ -9,7 +9,7 @@ import com.rzagorski.thingithubclient.utils.abstracts.MvpView;
 public class Search {
 
     public interface Presenter {
-
+        void onQueryChanged(String query);
     }
 
     public interface View extends MvpView {

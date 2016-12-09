@@ -8,7 +8,15 @@ import com.rzagorski.thingithubclient.utils.abstracts.BasePresenter;
 
 public class SearchPresenterImpl extends BasePresenter<Search.View> implements Search.Presenter {
 
-    public SearchPresenterImpl(Search.View view) {
+    SearchData.Presenter mSearchDataPresenter;
+
+    public SearchPresenterImpl(Search.View view, SearchData.Presenter searchDataPresenter) {
         super(view);
+        this.mSearchDataPresenter = searchDataPresenter;
+    }
+
+    @Override
+    public void onQueryChanged(String query) {
+        mSearchDataPresenter.onSearchQuery(query);
     }
 }

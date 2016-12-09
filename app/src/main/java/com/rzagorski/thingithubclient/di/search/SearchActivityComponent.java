@@ -3,6 +3,7 @@ package com.rzagorski.thingithubclient.di.search;
 import com.rzagorski.thingithubclient.di.ActivityScope;
 import com.rzagorski.thingithubclient.view.search.ListFragment;
 import com.rzagorski.thingithubclient.view.search.SearchActivity;
+import com.rzagorski.thingithubclient.view.search.SearchInput;
 
 import dagger.Subcomponent;
 
@@ -25,4 +26,6 @@ public interface SearchActivityComponent {
     SearchActivity inject(SearchActivity searchActivity);
 
     ListFragment inject(ListFragment listFragment);
+
+    SearchInput inject(SearchInput searchInput);
 }

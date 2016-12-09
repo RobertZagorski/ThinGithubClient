@@ -8,7 +8,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="false"
-    tools:context=".view.search.SearchActivity">
+    tools:context=".view.search.SearchActivity"
+    tools:menu="@menu/menu_search_activity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/ignored"
@@ -17,11 +18,24 @@
         android:fitsSystemWindows="false"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <include
-            layout="@layout/application_toolbar"
+        <FrameLayout
+            android:id="@+id/toolbar_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll|enterAlways"/>
+            android:layout_height="wrap_content">
+
+            <include
+                layout="@layout/application_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_scrollFlags="scroll|enterAlways"/>
+
+            <com.miguelcatalan.materialsearchview.MaterialSearchView
+                android:id="@+id/search_view"
+                style="@style/MaterialSearchViewStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </FrameLayout>
 
     </android.support.design.widget.AppBarLayout>
 
