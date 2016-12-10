@@ -20,6 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:drawableRight="@drawable/repo"
             android:layout_weight="1"
             android:gravity="center_vertical"
             tools:text="User"/>
@@ -36,12 +37,18 @@
 
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginRight="30dp"
+        android:background="@color/colorAccent"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:weightSum="8">
+        android:weightSum="1">
 
         <TextView
             android:id="@+id/language"
@@ -50,8 +57,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
-            android:layout_weight="2"
-            android:padding="8dp"
+            android:layout_weight="1"
+            android:paddingRight="2dp"
             tools:text="Java"/>
 
         <!-- Icon from http://www.flaticon.com/authors/dave-gandy-->
@@ -59,7 +66,6 @@
         <android.support.v7.widget.AppCompatImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:src="@drawable/star"/>
 
         <TextView
@@ -69,16 +75,15 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
-            android:layout_weight="2"
-            android:padding="8dp"
-            tools:text="12"/>
+            android:ems="3"
+            android:padding="2dp"
+            tools:text="1244"/>
 
         <!-- Icon from http://www.flaticon.com/authors/dave-gandy-->
 
         <android.support.v7.widget.AppCompatImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:src="@drawable/fork"/>
 
         <TextView
@@ -88,9 +93,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
-            android:layout_weight="2"
-            android:padding="8dp"
-            tools:text="12"/>
+            android:padding="2dp"
+            android:ems="3"
+            tools:text="5555"/>
 
     </LinearLayout>
 

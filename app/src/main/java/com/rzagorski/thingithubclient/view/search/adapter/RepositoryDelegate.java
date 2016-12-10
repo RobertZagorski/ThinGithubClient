@@ -44,7 +44,9 @@ public class RepositoryDelegate extends AdapterDelegate<List<GithubItem>> {
         GithubRepository repository = (GithubRepository) items.get(position);
 
         vh.name.setText(repository.getName());
-        vh.description.setText(repository.getDescription().toString());
+        if (repository.getDescription() != null) {
+            vh.description.setText(repository.getDescription().toString());
+        }
         vh.language.setText(repository.getLanguage());
         vh.starsCount.setText(String.valueOf(repository.getStargazersCount()));
         vh.forksCount.setText(String.valueOf(repository.getForksCount()));
