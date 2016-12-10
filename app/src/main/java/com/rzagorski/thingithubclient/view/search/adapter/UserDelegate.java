@@ -15,6 +15,9 @@ import com.rzagorski.thingithubclient.model.app.GithubUser;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by Robert Zagórski on 2016-12-09.
  */
@@ -49,15 +52,12 @@ public class UserDelegate extends AdapterDelegate<List<GithubItem>> {
 
     static class UserViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView name;
-        public TextView description;
-        public TextView starsCount;
+        @BindView(R.id.name) public TextView name;
+        @BindView(R.id.stars) public TextView starsCount;
 
         public UserViewHolder(View itemView) {
             super(itemView);
-            name = (TextView) itemView.findViewById(R.id.name);
-            description = (TextView) itemView.findViewById(R.id.description);
-            starsCount = (TextView) itemView.findViewById(R.id.stars);
+            ButterKnife.bind(this, itemView);
         }
     }
 }

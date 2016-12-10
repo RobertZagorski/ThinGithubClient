@@ -56,6 +56,7 @@ public class SearchDataPresenterImpl extends BasePresenter<SearchData.View> impl
         SearchSubscriber searchSubscriber = new SearchSubscriber();
         getSubscription().add(searchSubscriber);
         searchObs.subscribe(searchSubscriber);
+        getView().showLoading();
     }
 
     private List<GithubItem> mergeLists(List<GithubUser> githubUsers, List<GithubRepository> githubRepositories) {
@@ -70,7 +71,7 @@ public class SearchDataPresenterImpl extends BasePresenter<SearchData.View> impl
 
         @Override
         public void onCompleted() {
-
+            getView().hideLoading();
         }
 
         @Override

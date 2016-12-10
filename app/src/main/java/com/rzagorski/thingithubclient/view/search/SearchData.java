@@ -18,6 +18,10 @@ public class SearchData {
 
     public interface View extends MvpView {
 
+        void showLoading();
+
+        void hideLoading();
+
         void onSearchResults(List<GithubItem> githubItemList);
 
         void onSearchResultsError(Throwable e);

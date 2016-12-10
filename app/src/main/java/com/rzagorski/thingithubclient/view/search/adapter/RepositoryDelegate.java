@@ -15,6 +15,9 @@ import com.rzagorski.thingithubclient.model.app.GithubRepository;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by Robert Zagórski on 2016-12-09.
  */
@@ -54,19 +57,15 @@ public class RepositoryDelegate extends AdapterDelegate<List<GithubItem>> {
 
     static class RepositoryViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView name;
-        public TextView description;
-        public TextView starsCount;
-        public TextView language;
-        public TextView forksCount;
+        @BindView(R.id.name) public TextView name;
+        @BindView(R.id.description) public TextView description;
+        @BindView(R.id.stars_count) public TextView starsCount;
+        @BindView(R.id.language) public TextView language;
+        @BindView(R.id.forks_count) public TextView forksCount;
 
         public RepositoryViewHolder(View itemView) {
             super(itemView);
-            name = (TextView) itemView.findViewById(R.id.name);
-            description = (TextView) itemView.findViewById(R.id.description);
-            language = (TextView) itemView.findViewById(R.id.language);
-            starsCount = (TextView) itemView.findViewById(R.id.stars_count);
-            forksCount = (TextView) itemView.findViewById(R.id.forks_count);
+            ButterKnife.bind(this, itemView);
         }
     }
 }
