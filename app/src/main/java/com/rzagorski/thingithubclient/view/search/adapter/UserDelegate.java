@@ -44,15 +44,20 @@ public class UserDelegate extends AdapterDelegate<List<GithubItem>> {
         GithubUser user = (GithubUser) items.get(position);
 
         vh.name.setText(user.getLogin());
+        vh.starsCount.setText(String.valueOf(user.getScore()));
     }
 
     static class UserViewHolder extends RecyclerView.ViewHolder {
 
         public TextView name;
+        public TextView description;
+        public TextView starsCount;
 
         public UserViewHolder(View itemView) {
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.name);
+            description = (TextView) itemView.findViewById(R.id.description);
+            starsCount = (TextView) itemView.findViewById(R.id.stars);
         }
     }
 }

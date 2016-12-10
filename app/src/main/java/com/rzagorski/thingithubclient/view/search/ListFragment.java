@@ -43,7 +43,8 @@ public class ListFragment extends Fragment implements SearchData.View {
         super.onViewCreated(view, savedInstanceState);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(layoutManager);
         searchAdapter = new SearchAdapter();
         mRecyclerView.setAdapter(searchAdapter);
     }

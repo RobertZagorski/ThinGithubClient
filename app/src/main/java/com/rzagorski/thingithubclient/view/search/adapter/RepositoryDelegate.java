@@ -44,15 +44,27 @@ public class RepositoryDelegate extends AdapterDelegate<List<GithubItem>> {
         GithubRepository repository = (GithubRepository) items.get(position);
 
         vh.name.setText(repository.getName());
+        vh.description.setText(repository.getDescription().toString());
+        vh.language.setText(repository.getLanguage());
+        vh.starsCount.setText(String.valueOf(repository.getStargazersCount()));
+        vh.forksCount.setText(String.valueOf(repository.getForksCount()));
     }
 
     static class RepositoryViewHolder extends RecyclerView.ViewHolder {
 
         public TextView name;
+        public TextView description;
+        public TextView starsCount;
+        public TextView language;
+        public TextView forksCount;
 
         public RepositoryViewHolder(View itemView) {
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.name);
+            description = (TextView) itemView.findViewById(R.id.description);
+            language = (TextView) itemView.findViewById(R.id.language);
+            starsCount = (TextView) itemView.findViewById(R.id.stars_count);
+            forksCount = (TextView) itemView.findViewById(R.id.forks_count);
         }
     }
 }
