@@ -16,6 +16,7 @@ import com.rzagorski.thingithubclient.view.search.adapter.SearchAdapter;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 /**
  * Created by Robert Zagórski on 2016-12-09.
@@ -23,10 +24,13 @@ import javax.inject.Inject;
 
 public class ListFragment extends Fragment implements SearchData.View {
 
-    @Inject SearchData.Presenter mPresenter;
+    @Inject Provider<SearchData.Presenter> mPresenterProvider;
     RecyclerView mRecyclerView;
     SearchAdapter searchAdapter;
 
+    private SearchData.Presenter getPresenter() {
+        return mPresenterProvider.get();
+    }
 
     @Nullable
     @Override

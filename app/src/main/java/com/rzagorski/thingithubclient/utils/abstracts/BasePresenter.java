@@ -2,6 +2,8 @@ package com.rzagorski.thingithubclient.utils.abstracts;
 
 import android.support.annotation.CallSuper;
 
+import javax.inject.Provider;
+
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -11,11 +13,11 @@ import rx.subscriptions.CompositeSubscription;
  */
 public class BasePresenter<T extends MvpView> implements Presenter {
 
-    private T mMvpView;
+    private Provider<T> mMvpViewProvider;
     private CompositeSubscription mSubscription;
 
-    public BasePresenter(T view) {
-        this.mMvpView = view;
+    public BasePresenter(Provider<T> view) {
+        this.mMvpViewProvider = view;
         checkViewAttached();
         mSubscription = new CompositeSubscription();
     }
@@ -26,15 +28,15 @@ public class BasePresenter<T extends MvpView> implements Presenter {
         if (mSubscription != null && mSubscription.isUnsubscribed()) {
             mSubscription.clear();
         }
-        //mMvpView = null;
+        //mMvpViewProvider = null;
     }
 
     public boolean isViewAttached() {
-        return mMvpView != null;
+        return mMvpViewProvider != null;
     }
 
     public T getView() {
-        return mMvpView;
+        return mMvpViewProvider.get();
     }
 
     public CompositeSubscription getSubscription() {

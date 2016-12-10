@@ -13,13 +13,8 @@ import dagger.Subcomponent;
 @ActivityScope
 @Subcomponent(
         modules = {
-                SearchActivityModule.class,
-                SearchModule.class,
-                SearchViewModule.class,
-                SearchDataModule.class,
-                SearchDataViewModule.class
+                SearchActivityModule.class
         }
-
 )
 public interface SearchActivityComponent {
 

@@ -54,7 +54,7 @@ public class RetrofitApiFactory {
     private static Converter.Factory provideApiConverter() {
         Gson gson = new GsonBuilder()
                 .setLongSerializationPolicy(LongSerializationPolicy.STRING)
-                .setDateFormat("YYYY-MM-DD'T'HH:MM:SSZ")
+                .setDateFormat("yyyy-MM-DD'T'HH:MM:SSZ")
                 .create();
         return GsonConverterFactory.create(gson);
     }

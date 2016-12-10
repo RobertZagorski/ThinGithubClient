@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.inject.Provider;
+
 import rx.Observable;
 import rx.Subscriber;
 import rx.functions.Func2;
@@ -26,10 +28,10 @@ public class SearchDataPresenterImpl extends BasePresenter<SearchData.View> impl
     private SearchUserInteractor mSearchUserInteractor;
     private SearchRepositoryInteractor mSearchRepositoryInteractor;
 
-    public SearchDataPresenterImpl(SearchData.View view,
+    public SearchDataPresenterImpl(Provider<SearchData.View> viewProvider,
                                    SearchUserInteractor searchUserInteractor,
                                    SearchRepositoryInteractor searchRepositoryInteractor) {
-        super(view);
+        super(viewProvider);
         this.mSearchUserInteractor = searchUserInteractor;
         this.mSearchRepositoryInteractor = searchRepositoryInteractor;
     }

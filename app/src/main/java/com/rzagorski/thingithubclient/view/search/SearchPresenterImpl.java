@@ -5,6 +5,8 @@ import com.rzagorski.thingithubclient.utils.observable.DefaultSubscriber;
 
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Provider;
+
 import rx.Subscriber;
 import rx.functions.Func1;
 import rx.subjects.PublishSubject;
@@ -21,8 +23,8 @@ public class SearchPresenterImpl extends BasePresenter<Search.View> implements S
     private Subject<String, String> filteringSubject;
     Subscriber<String> filteringSubscriber;
 
-    public SearchPresenterImpl(Search.View view, SearchData.Presenter searchDataPresenter) {
-        super(view);
+    public SearchPresenterImpl(Provider<Search.View> viewProvider, SearchData.Presenter searchDataPresenter) {
+        super(viewProvider);
         this.mSearchDataPresenter = searchDataPresenter;
     }
 

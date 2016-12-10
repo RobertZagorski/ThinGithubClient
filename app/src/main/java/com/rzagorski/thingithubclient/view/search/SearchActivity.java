@@ -27,7 +27,7 @@ public class SearchActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         getComponent().inject(this);
-        getComponent().inject(searchInput);
+        getComponent().inject(listFragment);
         initViews();
         FragmentHelper.replaceFragment(getSupportFragmentManager(), listFragment, R.id.fragment_list);
     }

@@ -5,6 +5,7 @@ import android.view.MenuItem;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 /**
  * Created by Robert Zagórski on 2016-12-08.
@@ -13,7 +14,16 @@ import javax.inject.Inject;
 public class SearchInput implements Search.View, MaterialSearchView.OnQueryTextListener, MaterialSearchView.SearchViewListener {
 
     private MaterialSearchView mMaterialSearchView;
-    @Inject Search.Presenter mPresenter;
+    Provider<Search.Presenter> mPresenterProvider;
+
+    @Inject
+    public SearchInput(Provider<Search.Presenter> presenterProvider) {
+        mPresenterProvider = presenterProvider;
+    }
+
+    private Search.Presenter getPresenter() {
+        return mPresenterProvider.get();
+    }
 
     public void init(MaterialSearchView materialSearchView) {
         this.mMaterialSearchView = materialSearchView;
@@ -28,24 +38,23 @@ public class SearchInput implements Search.View, MaterialSearchView.OnQueryTextL
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        mPresenter.onQueryChanged(newText);
+        getPresenter().onQueryChanged(newText);
         return true;
     }
 
     @Override
     public void onSearchViewShown() {
-        mPresenter.onSearchOpened();
+        getPresenter().onSearchOpened();
     }
 
     @Override
     public void onSearchViewClosed() {
-        mPresenter.onSearchClosed();
+        getPresenter().onSearchClosed();
     }
 
     public void setMenuItem(MenuItem menuItem) {
         this.mMaterialSearchView.setMenuItem(menuItem);
     }
-
 
     public boolean isSearchOpen() {
         return mMaterialSearchView.isSearchOpen();

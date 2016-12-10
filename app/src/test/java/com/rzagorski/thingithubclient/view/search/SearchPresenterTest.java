@@ -11,6 +11,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import javax.inject.Provider;
+
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
@@ -25,14 +27,20 @@ public class SearchPresenterTest {
     @Mock Search.View view;
     @Mock SearchData.Presenter searchDataPresenter;
 
-    Search.Presenter presenter;
+    private Search.Presenter presenter;
 
     @Rule
     public ExpectedException expectedExceptionRule = ExpectedException.none();
 
     @Before
     public void setUp() throws Exception {
-        presenter = new SearchPresenterImpl(view, searchDataPresenter);
+        Provider<Search.View> provider = new Provider<Search.View>() {
+            @Override
+            public Search.View get() {
+                return view;
+            }
+        };
+        presenter = new SearchPresenterImpl(provider, searchDataPresenter);
     }
 
     @After
