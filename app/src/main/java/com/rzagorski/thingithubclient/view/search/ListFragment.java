@@ -73,27 +73,47 @@ public class ListFragment extends Fragment implements SearchData.View {
 
     @Override
     public void showLoading() {
-        if (searchAdapter.getItemCount() > 0) {
-            searchStatus.setVisibility(View.VISIBLE);
-            searchStatus.setText(getString(R.string.search_waiting));
-        }
-        progressBar.setVisibility(View.VISIBLE);
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (searchAdapter.getItemCount() > 0) {
+                    searchStatus.setVisibility(View.VISIBLE);
+                    searchStatus.setText(getString(R.string.search_waiting));
+                }
+                progressBar.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     @Override
     public void hideLoading() {
-        progressBar.setVisibility(View.GONE);
-        searchStatus.setVisibility(View.GONE);
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                progressBar.setVisibility(View.GONE);
+                searchStatus.setVisibility(View.GONE);
+            }
+        });
     }
 
     @Override
     public void onSearchResults(List<GithubItem> githubItemList) {
         searchAdapter.addAllItems(githubItemList);
-        searchAdapter.notifyDataSetChanged();
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                searchAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     @Override
     public void onSearchResultsError(Throwable e) {
         //TODO show error
+    }
+
+    @Override
+    public void clearResults() {
+        searchAdapter.clear();
     }
 }

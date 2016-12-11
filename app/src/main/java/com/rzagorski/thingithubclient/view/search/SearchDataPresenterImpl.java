@@ -27,6 +27,7 @@ public class SearchDataPresenterImpl extends BasePresenter<SearchData.View> impl
 
     private SearchUserInteractor mSearchUserInteractor;
     private SearchRepositoryInteractor mSearchRepositoryInteractor;
+    private SearchSubscriber searchSubscriber;
 
     public SearchDataPresenterImpl(Provider<SearchData.View> viewProvider,
                                    SearchUserInteractor searchUserInteractor,
@@ -53,10 +54,18 @@ public class SearchDataPresenterImpl extends BasePresenter<SearchData.View> impl
                         })
                 .compose(ObservableUtils.<List<GithubItem>>applySchedulers());
 
-        SearchSubscriber searchSubscriber = new SearchSubscriber();
+        searchSubscriber = new SearchSubscriber();
         getSubscription().add(searchSubscriber);
         searchObs.subscribe(searchSubscriber);
         getView().showLoading();
+    }
+
+    @Override
+    public void onCancelSearch() {
+        if (searchSubscriber != null && !searchSubscriber.isUnsubscribed()) {
+            searchSubscriber.unsubscribe();;
+        }
+        getView().clearResults();
     }
 
     private List<GithubItem> mergeLists(List<GithubUser> githubUsers, List<GithubRepository> githubRepositories) {
@@ -76,6 +85,7 @@ public class SearchDataPresenterImpl extends BasePresenter<SearchData.View> impl
 
         @Override
         public void onError(Throwable e) {
+            e.printStackTrace();
             getView().onSearchResultsError(e);
         }
 

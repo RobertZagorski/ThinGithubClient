@@ -8,9 +8,7 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Provider;
 
 import rx.Subscriber;
-import rx.functions.Func1;
 import rx.subjects.PublishSubject;
-import rx.subjects.Subject;
 
 /**
  * Created by Robert Zagórski on 2016-12-08.
@@ -20,7 +18,7 @@ public class SearchPresenterImpl extends BasePresenter<Search.View> implements S
 
     SearchData.Presenter mSearchDataPresenter;
 
-    private Subject<String, String> filteringSubject;
+    private PublishSubject<String> filteringSubject;
     Subscriber<String> filteringSubscriber;
 
     public SearchPresenterImpl(Provider<Search.View> viewProvider, SearchData.Presenter searchDataPresenter) {
@@ -31,6 +29,7 @@ public class SearchPresenterImpl extends BasePresenter<Search.View> implements S
     @Override
     public void onQueryChanged(String query) {
         if (query == null || query.length() == 0) {
+            mSearchDataPresenter.onCancelSearch();
             return;
         }
         filteringSubject.onNext(query);
@@ -39,21 +38,34 @@ public class SearchPresenterImpl extends BasePresenter<Search.View> implements S
     @Override
     public void onSearchOpened() {
         filteringSubject = PublishSubject.create();
-        filteringSubscriber = new DefaultSubscriber<>();
+        filteringSubscriber = new FilteringSubscriber();
         filteringSubject
                 .throttleWithTimeout(350, TimeUnit.MILLISECONDS)
-                .map(new Func1<String, String>() {
-                    @Override
-                    public String call(String query) {
-                        mSearchDataPresenter.onSearchQuery(query);
-                        return query;
-                    }
-                }).subscribe(filteringSubscriber);
+                .subscribe(filteringSubscriber);
     }
 
     @Override
     public void onSearchClosed() {
-        filteringSubscriber.unsubscribe();
+        if (!filteringSubscriber.isUnsubscribed()) {
+            filteringSubscriber.unsubscribe();
+        }
         filteringSubject = null;
+    }
+
+    private class FilteringSubscriber extends DefaultSubscriber<String> {
+        @Override
+        public void onCompleted() {
+            super.onCompleted();
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            super.onError(e);
+        }
+
+        @Override
+        public void onNext(String query) {
+            mSearchDataPresenter.onSearchQuery(query);
+        }
     }
 }

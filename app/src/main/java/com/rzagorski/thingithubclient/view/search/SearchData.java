@@ -14,6 +14,9 @@ public class SearchData {
     public interface Presenter {
 
         void onSearchQuery(String query);
+
+        void onCancelSearch();
+
     }
 
     public interface View extends MvpView {
@@ -25,5 +28,7 @@ public class SearchData {
         void onSearchResults(List<GithubItem> githubItemList);
 
         void onSearchResultsError(Throwable e);
+
+        void clearResults();
     }
 }

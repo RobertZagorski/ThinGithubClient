@@ -48,4 +48,9 @@ public class SearchAdapter extends RecyclerView.Adapter {
     public void addAllItems(List<GithubItem> list) {
         mItems.addAll(list);
     }
+
+    public void clear() {
+        mItems.clear();
+        notifyDataSetChanged();
+    }
 }
