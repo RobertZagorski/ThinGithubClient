@@ -1,5 +1,7 @@
 package com.rzagorski.thingithubclient.data.api;
 
+import android.support.annotation.Nullable;
+
 import com.rzagorski.thingithubclient.model.api.ApiSearchRepository;
 import com.rzagorski.thingithubclient.model.api.ApiSearchUser;
 
@@ -13,5 +15,5 @@ public interface ApiManager {
 
     Observable<ApiSearchUser> getUsersBySearchQuery(String query);
 
-    Observable<ApiSearchRepository> getRepositoriesBySearchQuery(String query);
+    Observable<ApiSearchRepository> getRepositoriesBySearchQuery(String query, @Nullable Integer page);
 }

@@ -13,10 +13,12 @@ import rx.Observable;
 
 public interface GithubApi {
     public static final String BASE_URL = "api.github.com";
+    public static final Integer ITEMS_PER_PAGE = 30;
 
     @GET("/search/users")
     Observable<ApiSearchUser> getSearchUser(@Query("q") String query);
 
     @GET("/search/repositories")
-    Observable<ApiSearchRepository> getSearchRepository(@Query("q") String query);
+    Observable<ApiSearchRepository> getSearchRepository(@Query("q") String query,
+                                                        @Query("page") Integer page);
 }

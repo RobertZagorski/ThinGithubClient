@@ -1,5 +1,7 @@
 package com.rzagorski.thingithubclient.data.api.retrofit;
 
+import android.support.annotation.Nullable;
+
 import com.rzagorski.thingithubclient.data.api.ApiManager;
 import com.rzagorski.thingithubclient.data.api.GithubApi;
 import com.rzagorski.thingithubclient.model.api.ApiSearchRepository;
@@ -25,7 +27,8 @@ public class RetrofitApiManagerImpl implements ApiManager {
     }
 
     @Override
-    public Observable<ApiSearchRepository> getRepositoriesBySearchQuery(String query) {
-        return mGithubApi.getSearchRepository(query);
+    public Observable<ApiSearchRepository> getRepositoriesBySearchQuery(String query,
+                                                                        @Nullable Integer page) {
+        return mGithubApi.getSearchRepository(query, page);
     }
 }

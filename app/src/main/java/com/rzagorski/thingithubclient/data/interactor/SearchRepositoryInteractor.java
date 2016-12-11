@@ -1,6 +1,7 @@
 package com.rzagorski.thingithubclient.data.interactor;
 
 import com.rzagorski.thingithubclient.data.api.ApiManager;
+import com.rzagorski.thingithubclient.data.api.GithubApi;
 import com.rzagorski.thingithubclient.model.api.ApiSearchRepository;
 import com.rzagorski.thingithubclient.model.app.GithubRepository;
 
@@ -16,6 +17,8 @@ import rx.functions.Func1;
 public class SearchRepositoryInteractor implements Interactor<List<GithubRepository>> {
     private ApiManager mApiManager;
     private String mQuery;
+    private Integer mMaxItems;
+    private Integer mLastInvokedPage = 0;
 
     public SearchRepositoryInteractor(ApiManager apiManager) {
         mApiManager = apiManager;
@@ -28,12 +31,30 @@ public class SearchRepositoryInteractor implements Interactor<List<GithubReposit
 
     @Override
     public Observable<List<GithubRepository>> build() {
-        return mApiManager.getRepositoriesBySearchQuery(mQuery)
+        return mApiManager.getRepositoriesBySearchQuery(mQuery, mLastInvokedPage)
                 .map(new Func1<ApiSearchRepository, List<GithubRepository>>() {
                     @Override
                     public List<GithubRepository> call(ApiSearchRepository apiSearchRepository) {
+                        mMaxItems = apiSearchRepository.getTotalCount();
                         return apiSearchRepository.getItems();
                     }
                 });
+    }
+
+    public Observable<List<GithubRepository>> getNextPage() {
+        mLastInvokedPage++;
+        return build();
+    }
+
+    public void clearCache() {
+        mQuery = null;
+        mLastInvokedPage = 0;
+    }
+
+    public boolean isMore() {
+        if (mMaxItems == null) {
+            return false;
+        }
+        return mLastInvokedPage * GithubApi.ITEMS_PER_PAGE < mMaxItems - GithubApi.ITEMS_PER_PAGE;
     }
 }
