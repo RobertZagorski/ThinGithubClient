@@ -76,7 +76,7 @@ public class ListFragment extends Fragment implements SearchData.View {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (searchAdapter.getItemCount() > 0) {
+                if (searchAdapter.getItemCount() == 0) {
                     searchStatus.setVisibility(View.VISIBLE);
                     searchStatus.setText(getString(R.string.search_waiting));
                 }
@@ -90,8 +90,8 @@ public class ListFragment extends Fragment implements SearchData.View {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                progressBar.setVisibility(View.GONE);
-                searchStatus.setVisibility(View.GONE);
+                progressBar.setVisibility(View.INVISIBLE);
+                searchStatus.setVisibility(View.INVISIBLE);
             }
         });
     }
