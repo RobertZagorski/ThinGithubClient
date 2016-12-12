@@ -24,9 +24,6 @@ public class PreviewActivity extends AppCompatActivity implements ComponentCreat
         getComponent().inject(this);
         getComponent().inject(previewFragment);
         FragmentHelper.replaceFragment(getSupportFragmentManager(), previewFragment, R.id.fragment_preview);
-        CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        collapsingToolbarLayout.setTitle("");
-        collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(android.R.color.transparent));
     }
 
     @Override
@@ -34,5 +31,10 @@ public class PreviewActivity extends AppCompatActivity implements ComponentCreat
         return ((ThinGithubClientApplication) getApplicationContext())
                 .getPreviewComponent()
                 .provide(new PreviewActivityModule(this));
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 }

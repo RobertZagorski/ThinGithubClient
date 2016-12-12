@@ -14,8 +14,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.rzagorski.thingithubclient.R;
+import com.rzagorski.thingithubclient.di.search.SearchActivityComponent;
 import com.rzagorski.thingithubclient.model.app.GithubItem;
 import com.rzagorski.thingithubclient.model.app.GithubUser;
+import com.rzagorski.thingithubclient.utils.interfaces.ComponentCreator;
 import com.rzagorski.thingithubclient.view.preview.PreviewActivity;
 import com.rzagorski.thingithubclient.view.search.adapter.SearchAdapter;
 
@@ -49,7 +51,13 @@ public class ListFragment extends Fragment implements SearchData.View {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.list_fragment, container, false);
+        View view = inflater.inflate(R.layout.list_fragment, container, false);
+        if (savedInstanceState != null) {
+            ((ComponentCreator<SearchActivityComponent>)getActivity())
+                    .getComponent()
+                    .inject(this);
+        }
+        return view;
     }
 
     @Override

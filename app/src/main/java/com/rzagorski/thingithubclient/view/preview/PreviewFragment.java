@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.rzagorski.thingithubclient.R;
+import com.rzagorski.thingithubclient.di.preview.PreviewActivityComponent;
+import com.rzagorski.thingithubclient.utils.interfaces.ComponentCreator;
 import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
@@ -36,16 +38,21 @@ public class PreviewFragment extends Fragment implements Preview.View {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.preview_fragment, container, false);
+        View view = inflater.inflate(R.layout.preview_fragment, container, false);
+        if (savedInstanceState != null) {
+            ((ComponentCreator<PreviewActivityComponent>)getActivity())
+                    .getComponent()
+                    .inject(this);
+        }
+        return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        getActivity().setTitle("");
+        butterknifeUnbinder = ButterKnife.bind(this, view);
         mPresenterProvider.get().downloadAvatar(Picasso.with(getActivity())).into(ivAvatar);
+        mPresenterProvider.get().getContent();
     }
 
     @Override
@@ -56,6 +63,6 @@ public class PreviewFragment extends Fragment implements Preview.View {
 
     @Override
     public void showUsername(String login) {
-        getActivity().setTitle(login);
+        toolbar.setTitle(login);
     }
 }

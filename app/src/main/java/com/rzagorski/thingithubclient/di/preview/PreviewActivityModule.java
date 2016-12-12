@@ -19,6 +19,7 @@ import dagger.Provides;
 )
 public class PreviewActivityModule {
     private PreviewActivity mPreviewActivity;
+    private static PreviewFragment previewFragment;
 
     public PreviewActivityModule(PreviewActivity previewActivity) {
         this.mPreviewActivity = previewActivity;
@@ -33,7 +34,10 @@ public class PreviewActivityModule {
     @Provides
     @ActivityScope
     PreviewFragment providePreviewFragment() {
-        return new PreviewFragment();
+        if (previewFragment == null) {
+            previewFragment = new PreviewFragment();
+        }
+        return previewFragment;
     }
 
     @Provides
