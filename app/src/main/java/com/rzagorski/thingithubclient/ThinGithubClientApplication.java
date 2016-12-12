@@ -6,6 +6,7 @@ import com.rzagorski.thingithubclient.di.ApplicationComponent;
 import com.rzagorski.thingithubclient.di.ApplicationModule;
 import com.rzagorski.thingithubclient.di.DaggerApplicationComponent;
 import com.rzagorski.thingithubclient.di.DataModule;
+import com.rzagorski.thingithubclient.di.preview.PreviewComponent;
 
 /**
  * Created by Robert Zagórski on 2016-12-08.
@@ -14,6 +15,7 @@ import com.rzagorski.thingithubclient.di.DataModule;
 public class ThinGithubClientApplication extends Application {
 
     ApplicationComponent applicationComponent;
+    PreviewComponent previewComponent;
 
     @Override
     public void onCreate() {
@@ -30,5 +32,13 @@ public class ThinGithubClientApplication extends Application {
 
     public ApplicationComponent getApplicationComponent() {
         return applicationComponent;
+    }
+
+    public PreviewComponent getPreviewComponent() {
+        return previewComponent;
+    }
+
+    public void setComponent(PreviewComponent previewComponent) {
+        this.previewComponent = previewComponent;
     }
 }

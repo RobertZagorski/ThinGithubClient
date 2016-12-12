@@ -1,5 +1,6 @@
 package com.rzagorski.thingithubclient.view.search;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import com.rzagorski.thingithubclient.R;
 import com.rzagorski.thingithubclient.model.app.GithubItem;
 import com.rzagorski.thingithubclient.model.app.GithubUser;
+import com.rzagorski.thingithubclient.view.preview.PreviewActivity;
 import com.rzagorski.thingithubclient.view.search.adapter.SearchAdapter;
 
 import java.util.List;
@@ -138,5 +140,11 @@ public class ListFragment extends Fragment implements SearchData.View {
     public void onUserClick(int adapterPosition) {
         GithubUser githubUser = (GithubUser) searchAdapter.getItemAt(adapterPosition);
         mPresenterProvider.get().onUserClick(githubUser);
+    }
+
+    @Override
+    public void showUserPreview() {
+        Intent intent = new Intent(getActivity(), PreviewActivity.class);
+        startActivity(intent);
     }
 }

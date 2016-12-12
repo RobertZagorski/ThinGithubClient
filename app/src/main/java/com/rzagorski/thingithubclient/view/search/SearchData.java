@@ -36,5 +36,7 @@ public class SearchData {
         void clearResults();
 
         void onUserClick(int adapterPosition);
+
+        void showUserPreview();
     }
 }

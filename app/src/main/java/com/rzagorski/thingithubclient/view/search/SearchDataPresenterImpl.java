@@ -28,6 +28,7 @@ public class SearchDataPresenterImpl extends BasePresenter<SearchData.View> impl
     private SearchUserInteractor mSearchUserInteractor;
     private SearchRepositoryInteractor mSearchRepositoryInteractor;
     private SearchSubscriber searchSubscriber;
+    private ScopeManager mScopeManager;
 
     public SearchDataPresenterImpl(Lazy<SearchData.View> viewProvider,
                                    SearchUserInteractor searchUserInteractor,
@@ -36,6 +37,7 @@ public class SearchDataPresenterImpl extends BasePresenter<SearchData.View> impl
         super(viewProvider);
         this.mSearchUserInteractor = searchUserInteractor;
         this.mSearchRepositoryInteractor = searchRepositoryInteractor;
+        this.mScopeManager = scopeManager;
     }
 
     @Override
@@ -92,7 +94,8 @@ public class SearchDataPresenterImpl extends BasePresenter<SearchData.View> impl
 
     @Override
     public void onUserClick(GithubUser githubUser) {
-
+        mScopeManager.createPreviewComponent(githubUser);
+        getView().showUserPreview();
     }
 
     private Observable<List<GithubItem>> mergeResults(Observable<List<GithubUser>> userSearchObs,
