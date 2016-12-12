@@ -3,14 +3,19 @@ package com.rzagorski.thingithubclient.view.preview;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatImageView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.rzagorski.thingithubclient.R;
+import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import dagger.Lazy;
@@ -21,7 +26,10 @@ import dagger.Lazy;
 
 public class PreviewFragment extends Fragment implements Preview.View {
 
-    @Inject Lazy<Preview.Presenter> mPresenter;
+    @Inject Lazy<Preview.Presenter> mPresenterProvider;
+
+    @BindView(R.id.avatar) AppCompatImageView ivAvatar;
+    @BindView(R.id.toolbar) Toolbar toolbar;
 
     Unbinder butterknifeUnbinder;
 
@@ -35,11 +43,19 @@ public class PreviewFragment extends Fragment implements Preview.View {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        getActivity().setTitle("");
+        mPresenterProvider.get().downloadAvatar(Picasso.with(getActivity())).into(ivAvatar);
     }
 
     @Override
     public void onStop() {
         super.onStop();
         butterknifeUnbinder.unbind();
+    }
+
+    @Override
+    public void showUsername(String login) {
+        getActivity().setTitle(login);
     }
 }

@@ -1,6 +1,7 @@
 package com.rzagorski.thingithubclient.di.preview;
 
 import com.rzagorski.thingithubclient.di.ActivityScope;
+import com.rzagorski.thingithubclient.model.app.GithubUser;
 import com.rzagorski.thingithubclient.view.preview.Preview;
 import com.rzagorski.thingithubclient.view.preview.PreviewActivity;
 import com.rzagorski.thingithubclient.view.preview.PreviewFragment;
@@ -37,7 +38,7 @@ public class PreviewActivityModule {
 
     @Provides
     @ActivityScope
-    PreviewPresenterImpl providePreviewPresenterImpl(Lazy<Preview.View> viewProvider) {
-        return new PreviewPresenterImpl(viewProvider);
+    PreviewPresenterImpl providePreviewPresenterImpl(Lazy<Preview.View> viewProvider, GithubUser githubUser) {
+        return new PreviewPresenterImpl(viewProvider, githubUser);
     }
 }

@@ -1,6 +1,7 @@
 package com.rzagorski.thingithubclient.view.preview;
 
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 
 import com.rzagorski.thingithubclient.R;
@@ -23,6 +24,9 @@ public class PreviewActivity extends AppCompatActivity implements ComponentCreat
         getComponent().inject(this);
         getComponent().inject(previewFragment);
         FragmentHelper.replaceFragment(getSupportFragmentManager(), previewFragment, R.id.fragment_preview);
+        CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        collapsingToolbarLayout.setTitle("");
+        collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(android.R.color.transparent));
     }
 
     @Override
