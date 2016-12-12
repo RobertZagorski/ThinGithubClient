@@ -20,6 +20,7 @@ import rx.Observable;
 import rx.observers.TestSubscriber;
 
 import static junit.framework.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 
 /**
@@ -43,17 +44,17 @@ public class SearchRepositoryInteractorTest {
 
     @Test
     public void testApiInterationWithApiManager() throws Exception {
-        Mockito.when(apiManager.getRepositoriesBySearchQuery(anyString())).thenReturn(Observable.<ApiSearchRepository>empty());
+        Mockito.when(apiManager.getRepositoriesBySearchQuery(anyString(), anyInt())).thenReturn(Observable.<ApiSearchRepository>empty());
         String testedString = "AnyQuery";
         searchRepositoryInteractor.build(testedString);
-        Mockito.verify(apiManager, Mockito.atLeastOnce()).getRepositoriesBySearchQuery(anyString());
+        Mockito.verify(apiManager, Mockito.atLeastOnce()).getRepositoriesBySearchQuery(anyString(), anyInt());
     }
 
     @Test
     public void testApiInteractionWithCorrectSearchQuery() throws Exception {
         String testedString = "AnyQuery";
         ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
-        Mockito.when(apiManager.getRepositoriesBySearchQuery(argumentCaptor.capture())).thenReturn(Observable.<ApiSearchRepository>empty());
+        Mockito.when(apiManager.getRepositoriesBySearchQuery(argumentCaptor.capture(), anyInt())).thenReturn(Observable.<ApiSearchRepository>empty());
         searchRepositoryInteractor.build(testedString);
         assertEquals(testedString, argumentCaptor.getValue());
     }
@@ -64,7 +65,7 @@ public class SearchRepositoryInteractorTest {
         List<GithubRepository> githubRepositoryList = new ArrayList<>();
         ApiSearchRepository apiSearchRepository = Mockito.mock(ApiSearchRepository.class);
         Mockito.when(apiSearchRepository.getItems()).thenReturn(githubRepositoryList);
-        Mockito.when(apiManager.getRepositoriesBySearchQuery(anyString())).thenReturn(Observable.just(apiSearchRepository));
+        Mockito.when(apiManager.getRepositoriesBySearchQuery(anyString(), anyInt())).thenReturn(Observable.just(apiSearchRepository));
         Observable<List<GithubRepository>> githubRepositoryListObservable = searchRepositoryInteractor.build(testedString);
         TestSubscriber<List<GithubRepository>> testSubscriber = new TestSubscriber<>();
         githubRepositoryListObservable.subscribe(testSubscriber);
@@ -78,7 +79,7 @@ public class SearchRepositoryInteractorTest {
         List<GithubRepository> githubRepositoryList = new ArrayList<>();
         ApiSearchRepository apiSearchRepository = Mockito.mock(ApiSearchRepository.class);
         Mockito.when(apiSearchRepository.getItems()).thenReturn(githubRepositoryList);
-        Mockito.when(apiManager.getRepositoriesBySearchQuery(anyString())).thenReturn(Observable.just(apiSearchRepository));
+        Mockito.when(apiManager.getRepositoriesBySearchQuery(anyString(), anyInt())).thenReturn(Observable.just(apiSearchRepository));
         Observable<List<GithubRepository>> githubRepositoryListObservable = searchRepositoryInteractor.build(testedString);
         TestSubscriber<List<GithubRepository>> testSubscriber = new TestSubscriber<>();
         githubRepositoryListObservable.subscribe(testSubscriber);
@@ -92,7 +93,7 @@ public class SearchRepositoryInteractorTest {
         List<GithubRepository> githubRepositoryList = new ArrayList<>();
         ApiSearchRepository apiSearchRepository = Mockito.mock(ApiSearchRepository.class);
         Mockito.when(apiSearchRepository.getItems()).thenReturn(githubRepositoryList);
-        Mockito.when(apiManager.getRepositoriesBySearchQuery(anyString())).thenReturn(Observable.just(apiSearchRepository));
+        Mockito.when(apiManager.getRepositoriesBySearchQuery(anyString(), anyInt())).thenReturn(Observable.just(apiSearchRepository));
         Observable<List<GithubRepository>> githubRepositoryListObservable = searchRepositoryInteractor.build(testedString);
         TestSubscriber<List<GithubRepository>> testSubscriber = new TestSubscriber<>();
         githubRepositoryListObservable.subscribe(testSubscriber);
@@ -106,7 +107,7 @@ public class SearchRepositoryInteractorTest {
         List<GithubRepository> githubRepositoryList = new ArrayList<>();
         ApiSearchRepository apiSearchRepository = Mockito.mock(ApiSearchRepository.class);
         Mockito.when(apiSearchRepository.getItems()).thenReturn(githubRepositoryList);
-        Mockito.when(apiManager.getRepositoriesBySearchQuery(anyString())).thenReturn(Observable.just(apiSearchRepository));
+        Mockito.when(apiManager.getRepositoriesBySearchQuery(anyString(), anyInt())).thenReturn(Observable.just(apiSearchRepository));
         Observable<List<GithubRepository>> githubRepositoryListObservable = searchRepositoryInteractor.build(testedString);
         TestSubscriber<List<GithubRepository>> testSubscriber = new TestSubscriber<>();
         githubRepositoryListObservable.subscribe(testSubscriber);
@@ -117,11 +118,44 @@ public class SearchRepositoryInteractorTest {
     @Test
     public void testAssertNotCompletedSuccessfullyWhenNull() throws Exception {
         String testedString = "AnyString";
-        Mockito.when(apiManager.getRepositoriesBySearchQuery(anyString())).thenReturn(Observable.<ApiSearchRepository>just(null));
+        Mockito.when(apiManager.getRepositoriesBySearchQuery(anyString(), anyInt())).thenReturn(Observable.<ApiSearchRepository>just(null));
         Observable<List<GithubRepository>> githubRepositoryListObservable = searchRepositoryInteractor.build(testedString);
         TestSubscriber<List<GithubRepository>> testSubscriber = new TestSubscriber<>();
         githubRepositoryListObservable.subscribe(testSubscriber);
         testSubscriber.awaitTerminalEvent();
         testSubscriber.assertNotCompleted();
+    }
+
+    @Test
+    public void testProperPagingAtStart() throws Exception {
+        String testedString = "AnyQuery";
+        ArgumentCaptor<Integer> argumentCaptor = ArgumentCaptor.forClass(Integer.class);
+        Mockito.when(apiManager.getRepositoriesBySearchQuery(anyString(), argumentCaptor.capture())).thenReturn(Observable.<ApiSearchRepository>empty());
+        searchRepositoryInteractor.build(testedString);
+        assertEquals(0, argumentCaptor.getValue().intValue());
+    }
+
+    @Test
+    public void testProperPagingAtNext() throws Exception {
+        String testedString = "AnyQuery";
+        ArgumentCaptor<Integer> argumentCaptor = ArgumentCaptor.forClass(Integer.class);
+        Mockito.when(apiManager.getRepositoriesBySearchQuery(anyString(), argumentCaptor.capture())).thenReturn(Observable.<ApiSearchRepository>empty());
+        searchRepositoryInteractor.build(testedString);
+        searchRepositoryInteractor.getNextPage();
+        List<Integer> values = argumentCaptor.getAllValues();
+        assertEquals(1, values.get(values.size() - 1).intValue());
+    }
+
+    @Test
+    public void testProperPagingAfterClear() throws Exception {
+        String testedString = "AnyQuery";
+        ArgumentCaptor<Integer> argumentCaptor = ArgumentCaptor.forClass(Integer.class);
+        Mockito.when(apiManager.getRepositoriesBySearchQuery(anyString(), argumentCaptor.capture())).thenReturn(Observable.<ApiSearchRepository>empty());
+        searchRepositoryInteractor.build(testedString);
+        searchRepositoryInteractor.getNextPage();
+        searchRepositoryInteractor.clearCache();
+        searchRepositoryInteractor.build(testedString);
+        List<Integer> values = argumentCaptor.getAllValues();
+        assertEquals(0, values.get(values.size() - 1).intValue());
     }
 }

@@ -16,7 +16,8 @@ public interface GithubApi {
     public static final Integer ITEMS_PER_PAGE = 30;
 
     @GET("/search/users")
-    Observable<ApiSearchUser> getSearchUser(@Query("q") String query);
+    Observable<ApiSearchUser> getSearchUser(@Query("q") String query,
+                                            @Query("page") Integer page);
 
     @GET("/search/repositories")
     Observable<ApiSearchRepository> getSearchRepository(@Query("q") String query,

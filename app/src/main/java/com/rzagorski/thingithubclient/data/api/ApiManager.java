@@ -13,7 +13,7 @@ import rx.Observable;
 
 public interface ApiManager {
 
-    Observable<ApiSearchUser> getUsersBySearchQuery(String query);
+    Observable<ApiSearchUser> getUsersBySearchQuery(String query, @Nullable Integer page);
 
     Observable<ApiSearchRepository> getRepositoriesBySearchQuery(String query, @Nullable Integer page);
 }

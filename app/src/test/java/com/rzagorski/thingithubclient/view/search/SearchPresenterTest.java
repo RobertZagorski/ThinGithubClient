@@ -34,13 +34,13 @@ public class SearchPresenterTest {
 
     @Before
     public void setUp() throws Exception {
-        Provider<Search.View> provider = new Provider<Search.View>() {
+        Provider<Search.View> viewProvider = new Provider<Search.View>() {
             @Override
             public Search.View get() {
                 return view;
             }
         };
-        presenter = new SearchPresenterImpl(provider, searchDataPresenter);
+        presenter = new SearchPresenterImpl(viewProvider, searchDataPresenter);
     }
 
     @After

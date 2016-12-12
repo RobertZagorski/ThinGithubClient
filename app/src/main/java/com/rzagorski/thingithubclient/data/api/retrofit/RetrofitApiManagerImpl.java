@@ -22,8 +22,9 @@ public class RetrofitApiManagerImpl implements ApiManager {
     }
 
     @Override
-    public Observable<ApiSearchUser> getUsersBySearchQuery(String query) {
-        return mGithubApi.getSearchUser(query);
+    public Observable<ApiSearchUser> getUsersBySearchQuery(String query,
+                                                           @Nullable Integer page) {
+        return mGithubApi.getSearchUser(query, page);
     }
 
     @Override
