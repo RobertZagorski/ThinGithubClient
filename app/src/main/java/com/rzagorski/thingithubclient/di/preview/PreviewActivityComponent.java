@@ -2,6 +2,7 @@ package com.rzagorski.thingithubclient.di.preview;
 
 import com.rzagorski.thingithubclient.di.ActivityScope;
 import com.rzagorski.thingithubclient.view.preview.PreviewActivity;
+import com.rzagorski.thingithubclient.view.preview.PreviewFragment;
 
 import dagger.Subcomponent;
 
@@ -15,4 +16,6 @@ import dagger.Subcomponent;
 public interface PreviewActivityComponent {
 
     PreviewActivity inject(PreviewActivity previewActivity);
+
+    PreviewFragment inject(PreviewFragment previewFragment);
 }
