@@ -12,8 +12,7 @@ import com.rzagorski.thingithubclient.view.search.SearchDataPresenterImpl;
 import com.rzagorski.thingithubclient.view.search.SearchInput;
 import com.rzagorski.thingithubclient.view.search.SearchPresenterImpl;
 
-import javax.inject.Provider;
-
+import dagger.Lazy;
 import dagger.Module;
 import dagger.Provides;
 
@@ -25,9 +24,7 @@ import dagger.Provides;
 )
 public class SearchActivityModule {
     private SearchActivity mSearchActivity;
-    private ListFragment listFragment;
-    private SearchDataPresenterImpl searchDataPresenter;
-    private SearchPresenterImpl searchPresenter;
+    private static SearchDataPresenterImpl searchDataPresenter;
 
     public SearchActivityModule(SearchActivity searchActivity) {
         this.mSearchActivity = searchActivity;
@@ -42,10 +39,13 @@ public class SearchActivityModule {
     @Provides
     @ActivityScope
     ListFragment provideListFragment() {
-        if (listFragment == null) {
-            listFragment = new ListFragment();
-        }
-        return listFragment;
+        return new ListFragment();
+    }
+
+    @Provides
+    @ActivityScope
+    SearchInput provideSearchInput(Lazy<Search.Presenter> presenterProvider) {
+        return new SearchInput(presenterProvider);
     }
 
     @Provides
@@ -62,7 +62,7 @@ public class SearchActivityModule {
 
     @Provides
     @ActivityScope
-    SearchDataPresenterImpl provideSearchDataPresenter(Provider<SearchData.View> viewProvider,
+    SearchDataPresenterImpl provideSearchDataPresenter(Lazy<SearchData.View> viewProvider,
                                                        SearchUserInteractor searchUserInteractor,
                                                        SearchRepositoryInteractor searchRepositoryInteractor) {
         if (searchDataPresenter == null) {
@@ -75,11 +75,8 @@ public class SearchActivityModule {
 
     @Provides
     @ActivityScope
-    SearchPresenterImpl provideSearchPresenter(Provider<Search.View> viewProvider,
+    SearchPresenterImpl provideSearchPresenter(Lazy<Search.View> viewProvider,
                                                SearchData.Presenter searchDataPresenter) {
-        if (searchPresenter == null) {
-            searchPresenter = new SearchPresenterImpl(viewProvider, searchDataPresenter);
-        }
-        return searchPresenter;
+        return new SearchPresenterImpl(viewProvider, searchDataPresenter);
     }
 }

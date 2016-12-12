@@ -5,7 +5,8 @@ import android.view.MenuItem;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
+
+import dagger.Lazy;
 
 /**
  * Created by Robert Zagórski on 2016-12-08.
@@ -14,10 +15,10 @@ import javax.inject.Provider;
 public class SearchInput implements Search.View, MaterialSearchView.OnQueryTextListener, MaterialSearchView.SearchViewListener {
 
     private MaterialSearchView mMaterialSearchView;
-    Provider<Search.Presenter> mPresenterProvider;
+    Lazy<Search.Presenter> mPresenterProvider;
 
     @Inject
-    public SearchInput(Provider<Search.Presenter> presenterProvider) {
+    public SearchInput(Lazy<Search.Presenter> presenterProvider) {
         mPresenterProvider = presenterProvider;
     }
 

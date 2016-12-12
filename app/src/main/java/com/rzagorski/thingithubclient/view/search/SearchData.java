@@ -17,6 +17,7 @@ public class SearchData {
 
         void onCancelSearch();
 
+        void onListEnd();
     }
 
     public interface View extends MvpView {

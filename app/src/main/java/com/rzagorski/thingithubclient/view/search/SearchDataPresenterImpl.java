@@ -13,8 +13,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.inject.Provider;
-
+import dagger.Lazy;
 import rx.Observable;
 import rx.Subscriber;
 import rx.functions.Func2;
@@ -29,7 +28,7 @@ public class SearchDataPresenterImpl extends BasePresenter<SearchData.View> impl
     private SearchRepositoryInteractor mSearchRepositoryInteractor;
     private SearchSubscriber searchSubscriber;
 
-    public SearchDataPresenterImpl(Provider<SearchData.View> viewProvider,
+    public SearchDataPresenterImpl(Lazy<SearchData.View> viewProvider,
                                    SearchUserInteractor searchUserInteractor,
                                    SearchRepositoryInteractor searchRepositoryInteractor) {
         super(viewProvider);
@@ -44,7 +43,54 @@ public class SearchDataPresenterImpl extends BasePresenter<SearchData.View> impl
         Observable<List<GithubRepository>> repositorySearchObs = mSearchRepositoryInteractor.build(query)
                 .onErrorResumeNext(Observable.just(Collections.<GithubRepository>emptyList()));
 
-        Observable<List<GithubItem>> searchObs = userSearchObs
+        Observable<List<GithubItem>> searchObs = mergeResults(userSearchObs, repositorySearchObs);
+
+        searchSubscriber = new SearchSubscriber();
+        getSubscription().add(searchSubscriber);
+        searchObs.subscribe(searchSubscriber);
+        getView().showLoading();
+    }
+
+
+    @Override
+    public void onCancelSearch() {
+        if (searchSubscriber != null && !searchSubscriber.isUnsubscribed()) {
+            searchSubscriber.unsubscribe();
+        }
+        getView().clearResults();
+    }
+
+    @Override
+    public void onListEnd() {
+        if (!mSearchUserInteractor.isMore() && !mSearchRepositoryInteractor.isMore()) {
+            return;
+        }
+        Observable<List<GithubUser>> userSearchObs;
+        if (mSearchUserInteractor.isMore()) {
+            userSearchObs = mSearchUserInteractor.getNextPage()
+                    .onErrorResumeNext(Observable.just(Collections.<GithubUser>emptyList()));
+        } else {
+            userSearchObs = Observable.empty();
+        }
+        Observable<List<GithubRepository>> repositorySearchObs;
+        if (mSearchRepositoryInteractor.isMore()) {
+            repositorySearchObs = mSearchRepositoryInteractor.getNextPage()
+                    .onErrorResumeNext(Observable.just(Collections.<GithubRepository>emptyList()));
+        } else {
+            repositorySearchObs = Observable.empty();
+        }
+
+        Observable<List<GithubItem>> searchObs = mergeResults(userSearchObs, repositorySearchObs);
+
+        searchSubscriber = new SearchSubscriber();
+        getSubscription().add(searchSubscriber);
+        searchObs.subscribe(searchSubscriber);
+        getView().showLoading();
+    }
+
+    private Observable<List<GithubItem>> mergeResults(Observable<List<GithubUser>> userSearchObs,
+                                                      Observable<List<GithubRepository>> repositorySearchObs) {
+        return userSearchObs
                 .zipWith(repositorySearchObs,
                         new Func2<List<GithubUser>, List<GithubRepository>, List<GithubItem>>() {
                             @Override
@@ -53,19 +99,6 @@ public class SearchDataPresenterImpl extends BasePresenter<SearchData.View> impl
                             }
                         })
                 .compose(ObservableUtils.<List<GithubItem>>applySchedulers());
-
-        searchSubscriber = new SearchSubscriber();
-        getSubscription().add(searchSubscriber);
-        searchObs.subscribe(searchSubscriber);
-        getView().showLoading();
-    }
-
-    @Override
-    public void onCancelSearch() {
-        if (searchSubscriber != null && !searchSubscriber.isUnsubscribed()) {
-            searchSubscriber.unsubscribe();;
-        }
-        getView().clearResults();
     }
 
     private List<GithubItem> mergeLists(List<GithubUser> githubUsers, List<GithubRepository> githubRepositories) {

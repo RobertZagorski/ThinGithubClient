@@ -19,11 +19,11 @@ import com.rzagorski.thingithubclient.view.search.adapter.SearchAdapter;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import dagger.Lazy;
 
 /**
  * Created by Robert Zagórski on 2016-12-09.
@@ -31,7 +31,7 @@ import butterknife.Unbinder;
 
 public class ListFragment extends Fragment implements SearchData.View {
 
-    @Inject Provider<SearchData.Presenter> mPresenterProvider;
+    @Inject Lazy<SearchData.Presenter> mPresenterProvider;
 
     @BindView(R.id.search_status) TextView searchStatus;
     @BindView(R.id.progress_bar) ProgressBar progressBar;
@@ -40,9 +40,8 @@ public class ListFragment extends Fragment implements SearchData.View {
 
     private Unbinder butterknifeUnbinder;
 
-    private SearchData.Presenter getPresenter() {
-        return mPresenterProvider.get();
-    }
+    private boolean loading = false;
+    int pastVisiblesItems, totalItemCount;
 
     @Nullable
     @Override
@@ -63,6 +62,23 @@ public class ListFragment extends Fragment implements SearchData.View {
         mRecyclerView.addItemDecoration(dividerItemDecoration);
         searchAdapter = new SearchAdapter();
         mRecyclerView.setAdapter(searchAdapter);
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (dy <= 0) {
+                    return;
+                }
+                totalItemCount = recyclerView.getLayoutManager().getItemCount();
+                pastVisiblesItems = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
+
+                if (!loading) {
+                    if (pastVisiblesItems == totalItemCount - 1) {
+                        loading = true;
+                        mPresenterProvider.get().onListEnd();
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -98,6 +114,7 @@ public class ListFragment extends Fragment implements SearchData.View {
 
     @Override
     public void onSearchResults(List<GithubItem> githubItemList) {
+        loading = false;
         searchAdapter.addAllItems(githubItemList);
         getActivity().runOnUiThread(new Runnable() {
             @Override

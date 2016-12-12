@@ -11,7 +11,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import javax.inject.Provider;
+import dagger.Lazy;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -34,7 +34,7 @@ public class SearchPresenterTest {
 
     @Before
     public void setUp() throws Exception {
-        Provider<Search.View> viewProvider = new Provider<Search.View>() {
+        Lazy<Search.View> viewProvider = new Lazy<Search.View>() {
             @Override
             public Search.View get() {
                 return view;

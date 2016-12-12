@@ -5,8 +5,7 @@ import com.rzagorski.thingithubclient.utils.observable.DefaultSubscriber;
 
 import java.util.concurrent.TimeUnit;
 
-import javax.inject.Provider;
-
+import dagger.Lazy;
 import rx.Subscriber;
 import rx.subjects.PublishSubject;
 
@@ -21,9 +20,9 @@ public class SearchPresenterImpl extends BasePresenter<Search.View> implements S
     private PublishSubject<String> filteringSubject;
     Subscriber<String> filteringSubscriber;
 
-    public SearchPresenterImpl(Provider<Search.View> viewProvider, SearchData.Presenter searchDataPresenter) {
+    public SearchPresenterImpl(Lazy<Search.View> viewProvider, SearchData.Presenter searchDataPresenterProvider) {
         super(viewProvider);
-        this.mSearchDataPresenter = searchDataPresenter;
+        this.mSearchDataPresenter = searchDataPresenterProvider;
     }
 
     @Override

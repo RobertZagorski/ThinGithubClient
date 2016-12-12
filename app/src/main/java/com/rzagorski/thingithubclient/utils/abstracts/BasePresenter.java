@@ -2,8 +2,7 @@ package com.rzagorski.thingithubclient.utils.abstracts;
 
 import android.support.annotation.CallSuper;
 
-import javax.inject.Provider;
-
+import dagger.Lazy;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -13,10 +12,10 @@ import rx.subscriptions.CompositeSubscription;
  */
 public class BasePresenter<T extends MvpView> implements Presenter {
 
-    private Provider<T> mMvpViewProvider;
+    private Lazy<T> mMvpViewProvider;
     private CompositeSubscription mSubscription;
 
-    public BasePresenter(Provider<T> view) {
+    public BasePresenter(Lazy<T> view) {
         this.mMvpViewProvider = view;
         checkViewAttached();
         mSubscription = new CompositeSubscription();
