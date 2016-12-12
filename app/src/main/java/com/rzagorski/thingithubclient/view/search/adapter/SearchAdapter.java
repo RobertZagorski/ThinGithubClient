@@ -3,11 +3,13 @@ package com.rzagorski.thingithubclient.view.search.adapter;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
+import com.hannesdorfmann.adapterdelegates3.AdapterDelegate;
 import com.hannesdorfmann.adapterdelegates3.AdapterDelegatesManager;
 import com.rzagorski.thingithubclient.model.app.GithubItem;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Robert Zagórski on 2016-12-09.
@@ -18,11 +20,12 @@ public class SearchAdapter extends RecyclerView.Adapter {
     private AdapterDelegatesManager<List<GithubItem>> mDelegatesManager;
     private List<GithubItem> mItems;
 
-    public SearchAdapter() {
+    public SearchAdapter(Set<? extends AdapterDelegate<List<GithubItem>>> delegatesSet) {
         mItems = new ArrayList<>();
         mDelegatesManager = new AdapterDelegatesManager<>();
-        mDelegatesManager.addDelegate(new UserDelegate());
-        mDelegatesManager.addDelegate(new RepositoryDelegate());
+        for (AdapterDelegate<List<GithubItem>> adapterDelegate : delegatesSet) {
+            mDelegatesManager.addDelegate(adapterDelegate);
+        }
     }
 
     @Override
@@ -43,6 +46,10 @@ public class SearchAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemCount() {
         return mItems.size();
+    }
+
+    public GithubItem getItemAt(int position) {
+        return mItems.get(position);
     }
 
     public void addAllItems(List<GithubItem> list) {

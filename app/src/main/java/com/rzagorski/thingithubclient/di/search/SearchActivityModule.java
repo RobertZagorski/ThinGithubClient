@@ -1,9 +1,12 @@
 package com.rzagorski.thingithubclient.di.search;
 
+import com.hannesdorfmann.adapterdelegates3.AdapterDelegate;
+import com.rzagorski.thingithubclient.data.ScopeManager;
 import com.rzagorski.thingithubclient.data.api.ApiManager;
 import com.rzagorski.thingithubclient.data.interactor.SearchRepositoryInteractor;
 import com.rzagorski.thingithubclient.data.interactor.SearchUserInteractor;
 import com.rzagorski.thingithubclient.di.ActivityScope;
+import com.rzagorski.thingithubclient.model.app.GithubItem;
 import com.rzagorski.thingithubclient.view.search.ListFragment;
 import com.rzagorski.thingithubclient.view.search.Search;
 import com.rzagorski.thingithubclient.view.search.SearchActivity;
@@ -11,6 +14,14 @@ import com.rzagorski.thingithubclient.view.search.SearchData;
 import com.rzagorski.thingithubclient.view.search.SearchDataPresenterImpl;
 import com.rzagorski.thingithubclient.view.search.SearchInput;
 import com.rzagorski.thingithubclient.view.search.SearchPresenterImpl;
+import com.rzagorski.thingithubclient.view.search.adapter.RepositoryDelegate;
+import com.rzagorski.thingithubclient.view.search.adapter.SearchAdapter;
+import com.rzagorski.thingithubclient.view.search.adapter.UserDelegate;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import dagger.Lazy;
 import dagger.Module;
@@ -24,6 +35,7 @@ import dagger.Provides;
 )
 public class SearchActivityModule {
     private SearchActivity mSearchActivity;
+    private static ListFragment listFragment;
     private static SearchDataPresenterImpl searchDataPresenter;
 
     public SearchActivityModule(SearchActivity searchActivity) {
@@ -39,7 +51,10 @@ public class SearchActivityModule {
     @Provides
     @ActivityScope
     ListFragment provideListFragment() {
-        return new ListFragment();
+        if (listFragment == null) {
+            listFragment = new ListFragment();
+        }
+        return listFragment;
     }
 
     @Provides
@@ -64,11 +79,13 @@ public class SearchActivityModule {
     @ActivityScope
     SearchDataPresenterImpl provideSearchDataPresenter(Lazy<SearchData.View> viewProvider,
                                                        SearchUserInteractor searchUserInteractor,
-                                                       SearchRepositoryInteractor searchRepositoryInteractor) {
+                                                       SearchRepositoryInteractor searchRepositoryInteractor,
+                                                       ScopeManager scopeManager) {
         if (searchDataPresenter == null) {
             searchDataPresenter = new SearchDataPresenterImpl(viewProvider,
                     searchUserInteractor,
-                    searchRepositoryInteractor);
+                    searchRepositoryInteractor,
+                    scopeManager);
         }
         return searchDataPresenter;
     }
@@ -78,5 +95,27 @@ public class SearchActivityModule {
     SearchPresenterImpl provideSearchPresenter(Lazy<Search.View> viewProvider,
                                                SearchData.Presenter searchDataPresenter) {
         return new SearchPresenterImpl(viewProvider, searchDataPresenter);
+    }
+
+    @Provides
+    @ActivityScope
+    UserDelegate provideUserDelegate(SearchData.View view) {
+        return new UserDelegate(view);
+    }
+
+    @Provides
+    @ActivityScope
+    RepositoryDelegate provideRepositoryDelegate() {
+        return new RepositoryDelegate();
+    }
+
+    @Provides
+    Set<? extends AdapterDelegate<List<GithubItem>>> provideAdapterDelegates(UserDelegate userDelegate, RepositoryDelegate repositoryDelegate) {
+        return new HashSet<>(Arrays.asList(userDelegate, repositoryDelegate));
+    }
+
+    @Provides
+    SearchAdapter provideSearchAdapter(Set<? extends AdapterDelegate<List<GithubItem>>> delegatesSet) {
+        return new SearchAdapter(delegatesSet);
     }
 }

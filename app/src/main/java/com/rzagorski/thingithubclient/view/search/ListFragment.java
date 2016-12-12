@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.rzagorski.thingithubclient.R;
 import com.rzagorski.thingithubclient.model.app.GithubItem;
+import com.rzagorski.thingithubclient.model.app.GithubUser;
 import com.rzagorski.thingithubclient.view.search.adapter.SearchAdapter;
 
 import java.util.List;
@@ -32,11 +33,11 @@ import dagger.Lazy;
 public class ListFragment extends Fragment implements SearchData.View {
 
     @Inject Lazy<SearchData.Presenter> mPresenterProvider;
+    @Inject SearchAdapter searchAdapter;
 
     @BindView(R.id.search_status) TextView searchStatus;
     @BindView(R.id.progress_bar) ProgressBar progressBar;
     @BindView(R.id.recycler_view) RecyclerView mRecyclerView;
-    SearchAdapter searchAdapter;
 
     private Unbinder butterknifeUnbinder;
 
@@ -60,7 +61,6 @@ public class ListFragment extends Fragment implements SearchData.View {
                 mRecyclerView.getContext(),
                 layoutManager.getOrientation());
         mRecyclerView.addItemDecoration(dividerItemDecoration);
-        searchAdapter = new SearchAdapter();
         mRecyclerView.setAdapter(searchAdapter);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -132,5 +132,11 @@ public class ListFragment extends Fragment implements SearchData.View {
     @Override
     public void clearResults() {
         searchAdapter.clear();
+    }
+
+    @Override
+    public void onUserClick(int adapterPosition) {
+        GithubUser githubUser = (GithubUser) searchAdapter.getItemAt(adapterPosition);
+        mPresenterProvider.get().onUserClick(githubUser);
     }
 }

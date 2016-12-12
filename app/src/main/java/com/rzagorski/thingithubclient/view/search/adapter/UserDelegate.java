@@ -12,6 +12,7 @@ import com.hannesdorfmann.adapterdelegates3.AdapterDelegate;
 import com.rzagorski.thingithubclient.R;
 import com.rzagorski.thingithubclient.model.app.GithubItem;
 import com.rzagorski.thingithubclient.model.app.GithubUser;
+import com.rzagorski.thingithubclient.view.search.SearchData;
 
 import java.util.List;
 
@@ -23,8 +24,10 @@ import butterknife.ButterKnife;
  */
 
 public class UserDelegate extends AdapterDelegate<List<GithubItem>> {
+    SearchData.View mView;
 
-    public UserDelegate() {
+    public UserDelegate(SearchData.View view) {
+        mView = view;
     }
 
     @Override
@@ -50,7 +53,7 @@ public class UserDelegate extends AdapterDelegate<List<GithubItem>> {
         vh.starsCount.setText(String.valueOf(user.getScore()));
     }
 
-    static class UserViewHolder extends RecyclerView.ViewHolder {
+    public class UserViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.name) public TextView name;
         @BindView(R.id.stars) public TextView starsCount;
@@ -58,6 +61,12 @@ public class UserDelegate extends AdapterDelegate<List<GithubItem>> {
         public UserViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mView.onUserClick(getAdapterPosition());
+                }
+            });
         }
     }
 }

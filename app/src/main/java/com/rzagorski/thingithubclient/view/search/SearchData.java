@@ -1,6 +1,7 @@
 package com.rzagorski.thingithubclient.view.search;
 
 import com.rzagorski.thingithubclient.model.app.GithubItem;
+import com.rzagorski.thingithubclient.model.app.GithubUser;
 import com.rzagorski.thingithubclient.utils.abstracts.MvpView;
 
 import java.util.List;
@@ -18,6 +19,8 @@ public class SearchData {
         void onCancelSearch();
 
         void onListEnd();
+
+        void onUserClick(GithubUser githubUser);
     }
 
     public interface View extends MvpView {
@@ -31,5 +34,7 @@ public class SearchData {
         void onSearchResultsError(Throwable e);
 
         void clearResults();
+
+        void onUserClick(int adapterPosition);
     }
 }

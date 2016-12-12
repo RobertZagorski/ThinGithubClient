@@ -1,5 +1,6 @@
 package com.rzagorski.thingithubclient.view.search;
 
+import com.rzagorski.thingithubclient.data.ScopeManager;
 import com.rzagorski.thingithubclient.data.interactor.SearchRepositoryInteractor;
 import com.rzagorski.thingithubclient.data.interactor.SearchUserInteractor;
 import com.rzagorski.thingithubclient.model.app.GithubItem;
@@ -30,7 +31,8 @@ public class SearchDataPresenterImpl extends BasePresenter<SearchData.View> impl
 
     public SearchDataPresenterImpl(Lazy<SearchData.View> viewProvider,
                                    SearchUserInteractor searchUserInteractor,
-                                   SearchRepositoryInteractor searchRepositoryInteractor) {
+                                   SearchRepositoryInteractor searchRepositoryInteractor,
+                                   ScopeManager scopeManager) {
         super(viewProvider);
         this.mSearchUserInteractor = searchUserInteractor;
         this.mSearchRepositoryInteractor = searchRepositoryInteractor;
@@ -86,6 +88,11 @@ public class SearchDataPresenterImpl extends BasePresenter<SearchData.View> impl
         getSubscription().add(searchSubscriber);
         searchObs.subscribe(searchSubscriber);
         getView().showLoading();
+    }
+
+    @Override
+    public void onUserClick(GithubUser githubUser) {
+
     }
 
     private Observable<List<GithubItem>> mergeResults(Observable<List<GithubUser>> userSearchObs,
